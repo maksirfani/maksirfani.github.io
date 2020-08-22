@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+	</head>
+	<body>
+		<input type="text" id="nama_kemampuan">
+		<button id="kirim_kemampuan">kemampuan submit</button>
+		<div class="hasil">
+			<table id="list_kemampuan" border="1px">
+				<thead>
+					<th>nama kemampuan</th>
+					<th colspan="2">aksi</th>
+				</thead>
+			</table>
+		</div>
+		<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+		<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+		<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-analytics.js"></script>
+		<!-- Add Firebase products that you want to use -->
+		<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-firestore.js"></script>
+	</body>
+	<script>
+		// let table_kemampuan = document.getElementById("list_kemampuan");
+		// let row1 = table_kemampuan.insertRow(0);
+		// let cell1 = row1.insertCell(0);
+		// let cell2 = row1.insertCell(1);
+
+		// cell1.innerHTML = "HAI KAMU";
+		// cell2.innerHTML = "HAI KAMU";
+
+
+		const htmlKemampuan = document.getElementById("kemampuan");
+	// TODO: Replace the following with your app's Firebase project configuration
+	const firebaseConfig = {
+		apiKey: "AIzaSyD3mYuRV43RXiM3Du3_sEVDZSuoNluX24o",
+		authDomain: "portfolio-8d52d.firebaseapp.com",
+		databaseURL: "https://portfolio-8d52d.firebaseio.com",
+		projectId: "portfolio-8d52d",
+		storageBucket: "portfolio-8d52d.appspot.com",
+		messagingSenderId: "451307387628",
+		appId: "1:451307387628:web:f132aba1fa4fbde85583c9",
+		measurementId: "G-T4JBZJRFG4"
+		};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.database();
+
+
+	function baca_data(){
+		let ref = firebase.database().ref("kemampuan/");
+
+		ref.on("value", function(snapshot){
+			console.log(snapshot.val());
+		},function(error){
+			console.log("error" + error.code);
+		});
+	}
+
+	document.getElementById("kirim_kemampuan").onclick = function(){
+		let nama_kemampuan = document.getElementById("nama_kemampuan").value;
+		// console.log(nama_kemampuan);
+		let id_kemampuan = firebase.database().ref().child('kemampuan').push().key;
+		firebase.database().ref('kemampuan/' + id_kemampuan).set({
+		nama_kemampuan : nama_kemampuan
+		}, function(error){
+				if(!error){
+					console.log("sukses");
+				}else{
+					console.log("gagal bruh");
+				}
+			}
+		);
+		// baca_data();
+	};
+		// baca_data();
+	let table_kemampuan = document.getElementById("list_kemampuan");
+
+	firebase.database().ref("kemampuan/").once("value", function(snapshot){
+		snapshot.forEach(function(childSnapshot){
+		// add_list(snapshot.val().nama_kemampuan);
+		// console.log(childSnapshot.val().nama_kemampuan);
+		coba_add_list(childSnapshot.val().nama_kemampuan,childSnapshot.key);
+		});
+	});
+
+	// DELETE
+	function delete_kemampuan(id){
+		let id_user = id.target.getAttribute("idkemampuan");
+		firebase.database().ref().child("kemampuan/" + id_user).remove();
+	}
+
+	function add_list(data) {
+		console.log(data);
+		data.forEach(function(childSnapshot){
+			let childData = childSnapshot.val();
+			let baris = table_kemampuan.insertRow();
+			let kolom = baris.insertCell();
+			let kolom2 = baris.insertCell(1);
+			let kolom3 = baris.insertCell(2);
+			kolom.innerHTML = childData.nama_kemampuan;
+			kolom2.innerHTML = "<button>edit</button>";
+
+			let button_delete = document.createElement("BUTTON");
+			button_delete.class = "edit-kemampuan";
+			button_delete.setAttribute("idkemampuan", data.key);
+			button_delete.innerHTML = "hapus";
+			button_delete.addEventListener("click", delete_kemampuan);
+			kolom3.append(button_delete);
+		})
+	}
+
+	function coba_add_list(nama_kemampuan, id_kemampuan) {
+		let col_kemampuan = "<td>"+nama_kemampuan+"</td>";
+		let col_delete = "<td><button idkemampuan="+id_kemampuan+">hapus</button></td>";
+		addEventListener("click", delete_kemampuan);
+		let col_edit = "<td><button>edit</button></td>";
+		let data = "<tr>"+col_kemampuan+col_edit+col_delete+"</tr>";
+		// console.log(data);
+		document.getElementById('list_kemampuan').innerHTML += data;
+	}
+
+
+	</script>
+</html>

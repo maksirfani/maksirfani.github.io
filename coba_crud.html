@@ -83,9 +83,11 @@
 		var lastkey = data.key;
 		nextkey = parseInt(lastkey)+1;
 		});
+
 		database.ref('users').on('child_changed', function(data) {
 		update_data_table(data.val().username,data.val().profile_picture,data.val().email,data.key)
 		});
+		
 		database.ref('users').on('child_removed', function(data) {
 		remove_data_table(data.key)
 		});

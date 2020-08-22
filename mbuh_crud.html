@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>AFFFFF</title>
+</head>
+<body>
+	<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-firestore.js"></script>
+</body>
+<script>
+	// TODO: Replace the following with your app's Firebase project configuration
+	const firebaseConfig = {
+		apiKey: "AIzaSyD3mYuRV43RXiM3Du3_sEVDZSuoNluX24o",
+		authDomain: "portfolio-8d52d.firebaseapp.com",
+		databaseURL: "https://portfolio-8d52d.firebaseio.com",
+		projectId: "portfolio-8d52d",
+		storageBucket: "portfolio-8d52d.appspot.com",
+		messagingSenderId: "451307387628",
+		appId: "1:451307387628:web:f132aba1fa4fbde85583c9",
+		measurementId: "G-T4JBZJRFG4"
+		};
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	firebase.database();
+
+	// KEMAMPUAN
+	function create_all_kemampuan() {
+		let judul = document.createElement("H1");
+		judul.innerHTML = "FOR AFN";
+		judul.style.float = "center";
+
+		let form = document.createElement("DIV");
+		form.setAttribute("id", "form_kemampuan");
+
+		let input_kemampuan = document.createElement("INPUT");
+		input_kemampuan.setAttribute("id", "nama_kemampuan");
+		input_kemampuan.setAttribute("type", "text");
+
+		let button_submit = document.createElement("BUTTON");
+		button_submit.setAttribute("id", "kirim_kemampuan");
+		button_submit.innerHTML = "Kirim Kemampuan";
+		button_submit.addEventListener("click", kirim_kemampuan);
+
+		document.body.appendChild(form);
+		document.getElementById("form_kemampuan").appendChild(judul);
+		document.getElementById("form_kemampuan").appendChild(input_kemampuan);
+		document.getElementById("form_kemampuan").appendChild(button_submit);
+	}
+
+	function kirim_kemampuan(data) {
+		let nama_kemampuan = document.getElementById("nama_kemampuan").value;
+
+		let table = document.getElementById("table_kemampuan");
+		let banyak_baris = table.rows.length;
+		// console.log(banyak_baris);
+		let baris_baru = table.insertRow(banyak_baris);
+		baris_baru.insertCell(0).innerHTML = nama_kemampuan;
+		let aksi = baris_baru.insertCell(1);
+		baris_baru.setAttribute("id", "baris"+banyak_baris);
+
+		let button_edit = document.createElement("BUTTON");
+		button_edit.setAttribute("id", "edit_kemampuan");
+		button_edit.innerHTML = "Edit";
+		button_edit.setAttribute("kolom_kemampuan", "0");
+		button_edit.setAttribute("baris_kemampuan", banyak_baris);
+		button_edit.addEventListener("click", pindah_ke_form);
+
+		let button_delete = document.createElement("BUTTON");
+		button_delete.setAttribute("id", banyak_baris);
+		button_delete.addEventListener("click", delete_data);
+		button_delete.innerHTML = "Delete";
+
+		aksi.append(button_edit);
+		aksi.append(button_delete);
+		document.getElementById("nama_kemampuan").value = "";
+	}
+
+	function table_kemampuan() {
+		let table = document.createElement("TABLE");
+		table.setAttribute("border", "1px");
+		table.setAttribute("id", "table_kemampuan")
+		let baris = table.insertRow();
+		let th_kemampaun = baris.insertCell(0).innerHTML = "nama kemampuan";
+		let th_aksi = baris.insertCell(1).innerHTML = "aksi";
+		document.body.appendChild(table);
+	}
+
+	function delete_data(data) {
+		let baris_table = document.getElementById("baris"+data.target.getAttribute("id"));
+		baris_table.remove();
+	}
+
+	function tombol_edit(baris, kolom) {
+		let tombol_edit = document.createElement("BUTTON");
+		tombol_edit.setAttribute("id", "edit_kemampuan");
+		tombol_edit.setAttribute("baris", baris);
+		tombol_edit.setAttribute("kolom", kolom);
+		tombol_edit.innerHTML = "Edit Kemampuan";
+		tombol_edit.addEventListener("click", edit_kemampuan);
+	}
+	function pindah_ke_form(data) {
+		let table = document.getElementById("table_kemampuan");
+		let baris = data.target.getAttribute("baris_kemampuan");
+		let kolom = data.target.getAttribute("kolom_kemampuan");
+		let data_nama_kemampuan = table.rows[baris].cells.item(kolom).innerHTML;
+		document.getElementById("nama_kemampuan").value = data_nama_kemampuan;
+		document.getElementById("kirim_kemampuan").style.display = "none";
+		tombol_edit(baris, kolom);
+	}
+
+
+	// function (argument) {
+	// 	// body...
+	// }
+
+	create_all_kemampuan();
+	table_kemampuan();
+
+</script>
+</html>
