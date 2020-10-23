@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div style="width: 500px" id="reader"></div>
+	<div class="alert alert-info" id="info_reader" style="display: none"></div>
+	
+	<script src="js/qr_scanner.js"></script>
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Plugin JavaScript -->
+	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<script>
+		function onScanSuccess(qrCodeMessage) {
+	// handle on success condition with the decoded message
+}
+
+var html5QrcodeScanner = new Html5QrcodeScanner(
+    "reader", { fps: 10, qrbox: 250 });
+        
+function onScanSuccess(qrCodeMessage) {
+    $("#info_reader").html("hasil : "+qrCodeMessage);
+    $("#info_reader").show();
+    html5QrcodeScanner.clear();
+    // ^ this will stop the scanner (video feed) and clear the scan area.
+}
+
+html5QrcodeScanner.render(onScanSuccess);
+	</script>
+</body>
+</html>
