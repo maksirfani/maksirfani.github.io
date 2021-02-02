@@ -35,7 +35,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger active" href="index.html"><i class="fa fa-arrow-left"></i> Kembali</a>
+            <a class="nav-link active py-3 px-0 px-lg-3 rounded" href="index.html"><i class="fa fa-arrow-left"></i> Kembali</a>
           </li>
         </ul>
       </div>
@@ -43,6 +43,7 @@
   </nav>
 
   <section class="page-section portfolio mt-5" id="list-artikel" style="display: none">
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-5">My List Artikel</h2>
     <div class="container" id="list-data-artikel">
       
     </div>
@@ -178,12 +179,14 @@
       document.querySelector("#thumbnail").src = snapshot.val().thumbnail;
     });
   }else{
-      document.querySelector("#list-artikel").style.display = 'block';
+    document.querySelector("#list-artikel").style.display = 'block';
+    let no = 0;
     firebase.database().ref('artikel').once('value',
       function(allRecords){
         allRecords.forEach(
           function (currentRecord) {
-            document.querySelector("#list-data-artikel").innerHTML ='<a href="artikel.html?artikel='+currentRecord.key+'"><h5 class="text-left text-uppercase text-secondary mb-0">'+currentRecord.val().judul+'</h5></a>';
+            no++;
+            document.querySelector("#list-data-artikel").innerHTML ='<a href="artikel.html?artikel='+currentRecord.key+'"><h5 class="text-left text-uppercase text-secondary mb-0">'+no+' . '+currentRecord.val().judul+'</h5></a><hr>';
           }
         );
       }
